@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anuj Game Hub</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #111;
+      color: white;
+    }
+
+    h1, .company-author {
+      text-align: center;
+    }
+
+    .game-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .game-card {
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      width: 250px;
+      text-align: center;
+      box-shadow: 0 0 10px #333;
+    }
+
+    .game-card button {
+      margin: 5px;
+      padding: 8px 12px;
+      background: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .game-card button:hover {
+      background: #0097a7;
+    }
+
+    #publishForm, #infoEditor {
+      margin: 30px auto;
+      text-align: center;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+    }
+
+    .company-author {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="siteTitle">🎮 Anuj Game Hub</h1>
+  <div class="company-author">
+    <div id="companyName">Made by: Anuj Studios</div>
+    <div id="authorName">Author: Anuj</div>
+  </div>
+
+  <div id="infoEditor">
+    <input type="text" id="newTitle" placeholder="Edit Website Title" />
+    <input type="text" id="newCompany" placeholder="Edit Company Name" />
+    <input type="text" id="newAuthor" placeholder="Edit Author Name" />
+    <br>
+    <button onclick="updateInfo()">✅ Update Info</button>
+  </div>
+
+  <div id="publishForm">
+    <input type="text" id="gameName" placeholder="Game Name" />
+    <input type="text" id="downloadLink" placeholder="Game Download Link" />
+    <button onclick="publishGame()">📤 Publish Game</button>
+  </div>
+
+  <div class="game-list" id="gameList">
+    <!-- Published games will appear here -->
+  </div>
+
+  <script>
+    let games = [];
+
+    function publishGame() {
+      const name = document.getElementById("gameName").value;
+      const link = document.getElementById("downloadLink").value;
+
+      if (!name || !link) {
+        alert("Please enter game name and link.");
+        return;
+      }
+
+      const game = { name, link };
+      games.push(game);
+      renderGames();
+      document.getElementById("gameName").value = '';
+      document.getElementById("downloadLink").value = '';
+    }
+
+    function renderGames() {
+      const gameList = document.getElementById("gameList");
+      gameList.innerHTML = '';
+
+      games.forEach((game) => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+
+        card.innerHTML = `
+          <h3>${game.name}</h3>
+          <button onclick="window.open('${game.link}', '_blank')">⬇ Download</button>
+          <button onclick="shareGame('${game.name}', '${game.link}')">🔗 Share</button>
+        `;
+
+        gameList.appendChild(card);
+      });
+    }
+
+    function shareGame(name, link) {
+      const shareText = `Check out this game: ${name} 👉 ${link}`;
+      navigator.clipboard.writeText(shareText).then(() => {
+        alert("Game link copied! Share it with friends.");
+      });
+    }
+
+    function updateInfo() {
+      const title = document.getElementById("newTitle").value;
+      const company = document.getElementById("newCompany").value;
+      const author = document.getElementById("newAuthor").value;
+
+      if (title) document.getElementById("siteTitle").innerText = "🎮 " + title;
+      if (company) document.getElementById("companyName").innerText = "Made by: " + company;
+      if (author) document.getElementById("authorName").innerText = "Author: " + author;
+
+      // Clear inputs
+      document.getElementById("newTitle").value = '';
+      document.getElementById("newCompany").value = '';
+      document.getElementById("newAuthor").value = '';
+    }
+  </script>
+
+</body>
+</html>
